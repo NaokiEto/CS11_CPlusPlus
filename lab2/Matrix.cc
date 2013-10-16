@@ -21,26 +21,20 @@ Matrix::Matrix(int r, int c)
 
     arr = new int[r * c];
 
-    for (int i = 0; i < r; i++)
+    for (int i = 0; i < r * c; i++)
     {
-        for (int j = 0; j < c; j++)
-        {
-            int index = i * c + j;
-            arr[index] = 0;
-        }
+        arr[i] = 0;
     }
 }
 
 // Destructor
 Matrix::~Matrix() 
 {
-
     // Release the memory for the array
-	if (arr != NULL)
-	{
-    	delete[] arr;
-	}
-
+    if (arr != NULL)
+    {
+        delete[] arr;
+    }
 }
 
 // Copy-constructor
@@ -51,13 +45,9 @@ Matrix::Matrix(Matrix &mat)
 
     arr = new int[row * col];
 
-    for (int i = 0; i < row; i++)
+    for (int i = 0; i < row * col; i++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            int index = i * col + j;
-            arr[index] = mat.arr[index];
-        }
+        arr[i] = mat.arr[i];
     }
 }
 
@@ -69,39 +59,38 @@ void Matrix::setelem(int ro, int co, int elem)
 }
 
 // Accessors
-
+// get the number of rows
 int Matrix::getrows()
 {
     return row;
 }
 
+// get the number of columns
 int Matrix::getcols()
 {
     return col;
 }
 
+// get the element
 int Matrix::getelem(int ro, int co)
 {
     int index = ro * col + co;
     return arr[index];
 }
 
+// Matrix addition
 void Matrix::add(Matrix &mat)
 {
     assert(row == mat.row);
     assert(col == mat.col);
 
-// make this one for loop
-    for (int i = 0; i < row; i++)
+    for (int i = 0; i < row * col; i++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            int index = i*col + j;
-            arr[index] += mat.arr[index];
-        }
+        arr[i] += mat.arr[i];
     }
 }
 
+// Matrix subtraction
 void Matrix::subtract(Matrix &mat)
 {
     assert(row == mat.row);
@@ -109,14 +98,11 @@ void Matrix::subtract(Matrix &mat)
 
     for (int i = 0; i < row; i++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            int index = i*col + j;
-            arr[index] -= mat.arr[index];
-        }
+        arr[i] -= mat.arr[i];
     }
 }
 
+// Matrix equals (see if two matrices are equal to each other)
 bool Matrix::equals(Matrix &mat)
 {
     if ((row != mat.row) || (col != mat.col))
@@ -124,15 +110,11 @@ bool Matrix::equals(Matrix &mat)
         return false;
     }
 
-    for (int i = 0; i < row; i++)
+    for (int i = 0; i < row * col; i++)
     {
-        for (int j = 0; j < col; j++)
+        if (arr[i] != mat.arr[i])
         {
-            int index = i*col + j;
-            if (arr[index] != mat.arr[index])
-            {
-                return false;
-            }   
+            return false;
         }
     }
     return true;

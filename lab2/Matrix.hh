@@ -4,9 +4,6 @@ class Matrix
     private:
     int row;
     int col;
-
-    //static int* arr = new int[row * col];
-
     int* arr;
 
     public:
@@ -32,6 +29,7 @@ class Matrix
     int getcols();
     int getelem(int ro, int co);
 
+    // Operations
     void add(Matrix& mat);
     void subtract(Matrix& mat);
     bool equals(Matrix& mat);

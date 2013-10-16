@@ -1,11 +1,9 @@
+// A 2-D Matrix class
 class Matrix 
 {
     private:
     int row;
     int col;
-
-    //static int* arr = new int[row * col];
-
     int* arr;
 
     public:
