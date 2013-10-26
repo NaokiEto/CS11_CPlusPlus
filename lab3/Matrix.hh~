@@ -1,12 +1,12 @@
+// A 2-D Matrix class
 class Matrix 
 {
     private:
     int row;
     int col;
-
-    //static int* arr = new int[row * col];
-
     int* arr;
+    void copy(const Matrix &mat);
+    void cleanup();
 
     public:
     //Constructors
@@ -18,7 +18,7 @@ class Matrix
     Matrix(int r, int c);
 
     // Copy-constructor
-    Matrix(Matrix const &mat);
+    Matrix(const Matrix &mat);
 
     // Destructor
     ~Matrix();
@@ -27,11 +27,20 @@ class Matrix
     void setelem(int ro, int co, int elem);
 
     // Accessors
-    int getrows();
-    int getcols();
-    int getelem(int ro, int co);
+    int getrows() const; //this doesn't change Matrix's state
+    int getcols() const;
+    int getelem(int ro, int co) const;
 
-    void add(Matrix& mat);
-    void subtract(Matrix& mat);
-    bool equals(Matrix& mat);
+    // Overloading the assignment, +=, and -= operator
+    Matrix& operator=(const Matrix &mSource);
+    Matrix& operator+= (const Matrix &mat);
+    Matrix& operator-= (const Matrix &mat);
+    Matrix& operator*= (const Matrix &mat);
+
+    const Matrix& operator+(const Matrix &mat) const;
+    const Matrix& operator-(const Matrix &mat) const;
+    const Matrix& operator*(const Matrix &mat) const;
+
+    bool operator==(const Matrix& mat) const;
+    bool operator!=(const Matrix& mat) const;
 };

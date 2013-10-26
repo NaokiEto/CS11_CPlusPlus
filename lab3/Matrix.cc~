@@ -1,11 +1,37 @@
 #include "Matrix.hh"
 #include <cassert>
+#include <cstddef>
 
 // Default Constructor: initializes matrix to 0 by 0.
 Matrix::Matrix() 
 {
     row = 0;
     col = 0;
+    arr = new int[0];
+}
+
+// Helper function to copy matrix
+void Matrix::copy(const Matrix &mat)
+{
+    row = mat.row;
+    col = mat.col;
+
+    arr = new int[row * col];
+
+    for (int i = 0; i < row * col; i++)
+    {
+        arr[i] = mat.arr[i];
+    }
+}
+
+// Helper function to delete matrix
+void Matrix::cleanup()
+{
+    // Release the memory for the array
+    if (arr != NULL)
+    {
+        delete[] arr;
+    }
 }
 
 // Initializes the matrix to be filled with 0's.
@@ -19,116 +45,169 @@ Matrix::Matrix(int r, int c)
 
     arr = new int[r * c];
 
-    for (int i = 0; i < r; i++)
+    for (int i = 0; i < r * c; i++)
     {
-        for (int j = 0; j < c; j++)
-        {
-            int index = i * c + j;
-            arr[index] = 0;
-        }
+        arr[i] = 0;
     }
 }
 
 // Destructor
 Matrix::~Matrix() 
 {
-    // Release the memory for the array
-	if (arr != NULL)
-	{
-    	delete [] arr;
-	}
+    this->cleanup();
 }
 
 // Copy-constructor
 Matrix::Matrix(const Matrix &mat)
 {
-    row = mat.row;
-    col = mat.col;
-
-    arr = new int[row * col];
-
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            int index = i * col + j;
-            arr[index] = mat.arr[index];
-        }
-    }
+    this->copy(mat);
 }
 
 // Mutator
 void Matrix::setelem(int ro, int co, int elem)
 {
+    // check the dimensions
+    assert(ro < row);
+    assert(co < col);
+
+    // get the index of the 1D array
     int index = ro * col + co;
     arr[index] = elem;
 }
 
 // Accessors
-
-int Matrix::getrows()
+// get the number of rows
+int Matrix::getrows() const
 {
     return row;
 }
 
-int Matrix::getcols()
+// get the number of columns
+int Matrix::getcols() const
 {
     return col;
 }
 
-int Matrix::getelem(int ro, int co)
+// get the element
+int Matrix::getelem(int ro, int co) const
 {
+    // Check dimensions
+    assert(ro < row);
+    assert(co < col);
+
+    // get the index of the 1D array
     int index = ro * col + co;
     return arr[index];
 }
 
-void Matrix::add(const Matrix &mat)
+// Overloading the assignment operator
+Matrix& Matrix::operator= (const Matrix &mSource)
 {
-    assert(row == mat.row);
-    assert(col == mat.col);
-
-    for (int i = 0; i < row; i++)
+    // Check for self-assignment
+    if (this != &mSource)
     {
-        for (int j = 0; j < col; j++)
-        {
-            int index = i*col + j;
-            arr[index] += mat.arr[index];
-        }
+        // Clean up the matrix
+        this->cleanup();
+
+        // Do the copy
+        this->copy(mSource);
     }
+    // return the existing object
+    return *this;
 }
 
-void Matrix::subtract(const Matrix &mat)
+// Overloading the += operator
+Matrix& Matrix::operator+= (const Matrix &mat)
 {
-    assert(row == mat.row);
-    assert(col == mat.col);
+    assert(this->row == mat.row);
+    assert(this->col == mat.col);
 
-    for (int i = 0; i < row; i++)
+    for (int i = 0; i < this->row * this->col; i++)
     {
-        for (int j = 0; j < col; j++)
-        {
-            int index = i*col + j;
-            arr[index] -= mat.arr[index];
-        }
+        this->arr[i] += mat.arr[i];
     }
+    return *this;
 }
 
-bool Matrix::equals(const Matrix &mat)
+// Overloading the -= operator
+Matrix& Matrix::operator-= (const Matrix &mat)
 {
-    if ((row != mat.row) || (col != mat.col))
+    assert(this->row == mat.row);
+    assert(this->col == mat.col);
+
+    for (int i = 0; i < this->row * this->col; i++)
+    {
+        this->arr[i] -= mat.arr[i];
+    }
+    return *this;
+}
+
+// Overloading the *= operator
+Matrix& Matrix::operator*= (const Matrix &mat)
+{
+    assert(this->col == mat.row);
+    Matrix result(this->row, mat.col);
+    for (int i = 0; i < this->row; i++)
+    {
+        for (int j = 0; j < this->col; j++)
+        {
+            for (int k = 0; k < mat.col; k++)
+            {
+                result.arr[i*this->col + k] += this->arr[i*this->col + j] * mat.arr[j*mat.col + k];
+            }
+        }
+    }
+    *this = result;
+    return *this;
+}
+
+// Overloading the + operator
+const Matrix Matrix::operator+(const Matrix &mat) const
+{
+    Matrix result(mat.row, mat.col);
+    result = *this;
+    result += mat;
+    return result;
+}
+
+// Overloading the - operator
+const Matrix Matrix::operator-(const Matrix &mat) const
+{
+    Matrix result(mat.row, mat.col);
+    result = *this;
+    result -= mat;
+    return result;
+}
+
+// Overloading the * operator
+const Matrix& Matrix::operator*(const Matrix &mat) const
+{
+    Matrix result(this->row, mat.col);
+    result = *this;
+    result *= mat;
+    return result;
+}
+
+// Overloading the Matrix == operator (see if two matrices are equal to each other)
+bool Matrix::operator==(const Matrix &mat) const
+{
+    if ((this->row != mat.row) || (this->col != mat.col))
     {
         return false;
     }
 
-    for (int i = 0; i < row; i++)
+    for (int i = 0; i < this->row * this->col; i++)
     {
-        for (int j = 0; j < col; j++)
+        if (this->arr[i] != mat.arr[i])
         {
-            int index = i*col + j;
-            if (arr[index] != mat.arr[index])
-            {
-                return false;
-            }   
+            return false;
         }
     }
     return true;
+}
+
+// Overloading the != operator
+bool Matrix::operator!=(const Matrix &mat) const
+{
+    return !(*this == mat);
 }

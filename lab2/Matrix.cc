@@ -54,6 +54,11 @@ Matrix::Matrix(Matrix &mat)
 // Mutator
 void Matrix::setelem(int ro, int co, int elem)
 {
+    // check the dimensions
+    assert(ro < row);
+    assert(co < col);
+
+    // get the index of the 1D array
     int index = ro * col + co;
     arr[index] = elem;
 }
@@ -74,6 +79,11 @@ int Matrix::getcols()
 // get the element
 int Matrix::getelem(int ro, int co)
 {
+    // Check dimensions
+    assert(ro < row);
+    assert(co < col);
+
+    // get the index of the 1D array
     int index = ro * col + co;
     return arr[index];
 }
