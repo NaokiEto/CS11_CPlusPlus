@@ -31,16 +31,18 @@ class Matrix
     int getcols() const;
     int getelem(int ro, int co) const;
 
-    // Overloading the assignment, +=, and -= operator
+    // Overloading the assignment, +=, -=, and *= operator
     Matrix& operator=(const Matrix &mSource);
     Matrix& operator+= (const Matrix &mat);
     Matrix& operator-= (const Matrix &mat);
     Matrix& operator*= (const Matrix &mat);
 
+    // Overloading simple arithmetic operators
     const Matrix operator+(const Matrix &mat) const;
     const Matrix operator-(const Matrix &mat) const;
     const Matrix operator*(const Matrix &mat) const;
 
+    // Overloading == and !=
     bool operator==(const Matrix& mat) const;
     bool operator!=(const Matrix& mat) const;
 };

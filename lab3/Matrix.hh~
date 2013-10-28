@@ -37,10 +37,12 @@ class Matrix
     Matrix& operator-= (const Matrix &mat);
     Matrix& operator*= (const Matrix &mat);
 
-    const Matrix& operator+(const Matrix &mat) const;
-    const Matrix& operator-(const Matrix &mat) const;
-    const Matrix& operator*(const Matrix &mat) const;
+    // Overloading simple arithmetic operators
+    const Matrix operator+(const Matrix &mat) const;
+    const Matrix operator-(const Matrix &mat) const;
+    const Matrix operator*(const Matrix &mat) const;
 
+    // Overloading == and !=
     bool operator==(const Matrix& mat) const;
     bool operator!=(const Matrix& mat) const;
 };
