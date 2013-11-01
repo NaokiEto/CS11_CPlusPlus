@@ -19,6 +19,7 @@ class SparseVector
     void copyList(const SparseVector &sv);
     void setNonzeroElem(int idx, int val);
     void removeElem(int idx);
+    void checkListOrder()
 
     public:
     // Constructors
@@ -37,7 +38,7 @@ class SparseVector
     int getElem(int idx) const;
 
     // Mutators
-    setElem()
+    void setElem(int idx, int val);
 
     // Overloading the assignment operator
     SparseVector& operator=(const SparseVector &sv);

@@ -1,5 +1,6 @@
 #include "SparseVector.hh"
 #include <cassert>
+#include <stdio.h>
 
 SparseVector::SparseVector(int s)
 {
@@ -91,6 +92,8 @@ void SparseVector::setNonzeroElem(int idx, int val)
         node *newnode = new node(idx, 1, curr);
         prev->next = newnode;
     }
+
+    checkListOrder();
 }
 
 // helper method to delete a node from the list
@@ -112,6 +115,8 @@ void SparseVector::removeElem(int idx)
         delete curr;
     }
     // if we don't find the index, nothing needs to be done!
+
+    checkListOrder();
 }
 
 // Copy-constructor
@@ -179,6 +184,24 @@ SparseVector& SparseVector::operator= (const SparseVector &sv)
         this->copyList(sv);
     }
     return *this;
+}
+
+void SparseVector::checkListOrder()
+{
+    node *curr = firstnon0;
+    int idx = -1;
+    while (curr->next != 0)
+    {
+        if (idx < curr->index)
+        {
+            idx = curr->index;
+        }
+        else
+        {
+            printf("Error in index progression\n");
+        }
+        curr = curr->next;
+    }
 }
 
 

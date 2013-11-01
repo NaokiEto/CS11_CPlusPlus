@@ -19,6 +19,7 @@ class SparseVector
     void copyList(const SparseVector &sv);
     void setNonzeroElem(int idx, int val);
     void removeElem(int idx);
+    void checkListOrder();
 
     public:
     // Constructors
