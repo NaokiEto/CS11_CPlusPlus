@@ -73,6 +73,7 @@ void SparseVector::setNonzeroElem(int idx, int val)
     if (curr->index == idx)
     {
         curr->value = val;
+        //checkListOrder();
     }
     // if we can't find the index and are at the beginning of the list
     else if (firstnon0->index > idx)
@@ -89,11 +90,10 @@ void SparseVector::setNonzeroElem(int idx, int val)
     // if we can't find the index and are in the middle of the list
     else if (curr->index > idx)
     {
-        node *newnode = new node(idx, val, curr);
+        node *newnode = new node(idx, val);
         prev->next = newnode;
+	newnode->next = curr;
     }
-
-    checkListOrder();
 }
 
 // helper method to delete a node from the list
@@ -117,13 +117,14 @@ void SparseVector::removeElem(int idx)
     }
     // if we don't find the index, nothing needs to be done!
 
-    checkListOrder();
+    //checkListOrder();
 }
 
 // Copy-constructor
 SparseVector::SparseVector(const SparseVector &sv)
 {
     this->copyList(sv);
+    checkListOrder();
 }
 
 // Destructor
@@ -142,23 +143,25 @@ int SparseVector::getSize() const
 // Get the value at the specified node
 int SparseVector::getElem(int idx) const
 {
+    //checkListOrder();
     node *curr = firstnon0;
-    while (curr->next != 0)
+
+    while(curr->index < idx)
     {
-        int i = 0;
-        while(curr->index < idx)
-        {
-            // if we find the desired index, return the value
-            if (curr->index == idx)
-            {
-                return curr->value;
-            }
-            i += 1;
-        }
+        curr = curr->next;
     }
-    // if the desired index is bigger than the max index, return 0
+
+    // if we find the desired index, return the value
+    if (curr->index == idx)
+    {
+        return curr->value;
+    }
+
     // if the desired index is not in list, return 0 too;
-    return 0;
+    else
+    {
+        return 0;
+    }
 }
 
 void SparseVector::setElem(int idx, int val)
@@ -199,7 +202,7 @@ void SparseVector::checkListOrder()
         }
         else
         {
-            printf("Error in index progression\n");
+            printf("Error in index progression from index %d to index %d \n", idx, curr->index);
         }
         curr = curr->next;
     }
