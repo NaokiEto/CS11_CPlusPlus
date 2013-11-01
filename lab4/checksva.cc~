@@ -250,7 +250,6 @@ void getsetelem(ErrorContext &ec, int runs)
       pass = true;
       for (int i = 0; i < 10; i++)
         pass = pass && (sv.getElem(i * 4 + i % 3) == 100 - 3 * i);
-      ec.result(pass);
 
       // Finally, make sure all other values are reported as zero.
       // NOTE:  Don't trust sv.getSize() here.  :)
@@ -331,6 +330,7 @@ void getsetelem(ErrorContext &ec, int runs)
 
       pass = pass && (sv.getElem(1) == -16);
       pass = pass && (sv.getElem(38) == 22);
+      ec.result(pass);
 
       for (int i = 0, index = 3; i < 10; i++)
       {
