@@ -63,7 +63,7 @@ void SparseVector::setNonzeroElem(int idx, int val)
     node *prev;
 
     // go through the sparse vector
-    while (curr != 0 and curr->index < idx)
+    while (curr->index < idx && curr->next != 0)
     {
         prev = curr;
         curr = curr->next;
@@ -77,19 +77,19 @@ void SparseVector::setNonzeroElem(int idx, int val)
     // if we can't find the index and are at the beginning of the list
     else if (firstnon0->index > idx)
     {
-        node *newnode = new node(idx, 1, firstnon0);
+        node *newnode = new node(idx, val, firstnon0);
         firstnon0 = newnode;
     }
     // if we can't find the index and are at the end of the list
-    else if (curr == 0)
+    else if (curr->next == 0)
     {
-        node *newnode = new node(idx, 1);
-        prev->next = newnode;
+        node *newnode = new node(idx, val);
+        curr->next = newnode;
     }
     // if we can't find the index and are in the middle of the list
     else if (curr->index > idx)
     {
-        node *newnode = new node(idx, 1, curr);
+        node *newnode = new node(idx, val, curr);
         prev->next = newnode;
     }
 
@@ -108,7 +108,8 @@ void SparseVector::removeElem(int idx)
         prev = curr;
         curr = curr->next;
     }
-    // if we find the index
+
+    // if we find the index and are at the middle of the list
     if (curr->index == idx)
     {
         prev->next = curr->next;
