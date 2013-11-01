@@ -153,7 +153,7 @@ Matrix& Matrix::operator*= (const Matrix &mat)
         {
             for (int k = 0; k < mat.col; k++)
             {
-                result.arr[i*this->col + k] += this->arr[i*this->col + j] * mat.arr[j*mat.col + k];
+                result.arr[i*mat.col + k] += this->arr[i*this->col + j] * mat.arr[j*mat.col + k];
             }
         }
     }
@@ -164,8 +164,7 @@ Matrix& Matrix::operator*= (const Matrix &mat)
 // Overloading the + operator
 const Matrix Matrix::operator+(const Matrix &mat) const
 {
-    Matrix result(mat.row, mat.col);
-    result = *this;
+    Matrix result = *this;
     result += mat;
     return result;
 }
@@ -173,8 +172,7 @@ const Matrix Matrix::operator+(const Matrix &mat) const
 // Overloading the - operator
 const Matrix Matrix::operator-(const Matrix &mat) const
 {
-    Matrix result(mat.row, mat.col);
-    result = *this;
+    Matrix result = *this;
     result -= mat;
     return result;
 }
@@ -182,8 +180,7 @@ const Matrix Matrix::operator-(const Matrix &mat) const
 // Overloading the * operator
 const Matrix Matrix::operator*(const Matrix &mat) const
 {
-    Matrix result(this->row, mat.col);
-    result = *this;
+    Matrix result = *this;
     result *= mat;
     return result;
 }

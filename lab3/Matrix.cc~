@@ -164,8 +164,7 @@ Matrix& Matrix::operator*= (const Matrix &mat)
 // Overloading the + operator
 const Matrix Matrix::operator+(const Matrix &mat) const
 {
-    Matrix result(mat.row, mat.col);
-    result = *this;
+    Matrix result = *this;
     result += mat;
     return result;
 }
@@ -173,17 +172,15 @@ const Matrix Matrix::operator+(const Matrix &mat) const
 // Overloading the - operator
 const Matrix Matrix::operator-(const Matrix &mat) const
 {
-    Matrix result(mat.row, mat.col);
-    result = *this;
+    Matrix result = *this;
     result -= mat;
     return result;
 }
 
 // Overloading the * operator
-const Matrix& Matrix::operator*(const Matrix &mat) const
+const Matrix Matrix::operator*(const Matrix &mat) const
 {
-    Matrix result(this->row, mat.col);
-    result = *this;
+    Matrix result = *this;
     result *= mat;
     return result;
 }
