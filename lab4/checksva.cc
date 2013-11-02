@@ -3,7 +3,6 @@
 #include <iostream>
 #include <set>
 #include <sstream>
-#include <stdio.h>
 
 #include "SparseVector.hh"
 
@@ -258,6 +257,7 @@ void getsetelem(ErrorContext &ec, int runs)
         if (indexes.find(i) == indexes.end())
           pass = pass && (sv.getElem(i) == 0);
       }
+
       ec.result(pass);
     }
   
@@ -330,7 +330,6 @@ void getsetelem(ErrorContext &ec, int runs)
 
       pass = pass && (sv.getElem(1) == -16);
       pass = pass && (sv.getElem(38) == 22);
-      ec.result(pass);
 
       for (int i = 0, index = 3; i < 10; i++)
       {
@@ -338,7 +337,6 @@ void getsetelem(ErrorContext &ec, int runs)
         index = (index + 19 + i % 5) % 40;
       }
 
-      ec.result(pass);
       // Finally, make sure all other values are reported as zero.
       // NOTE:  Don't trust sv.getSize() here.  :)
       for (int i = 0; i < 40; i++)

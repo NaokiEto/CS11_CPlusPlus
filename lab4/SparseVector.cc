@@ -9,7 +9,6 @@ SparseVector::SparseVector(int s)
 
     size = s;
     firstnon0 = 0;
-    //checkListOrder();
 }
 
 // Helper function to delete sparse vector
@@ -21,8 +20,6 @@ void SparseVector::clear()
     {
         // Get what is next, before deleting curr.
         node *nxt = curr->next;
-        // debug
-        printf("the index and value are: %d, %d \n", curr->index, curr->value);
         // Delete this node.
         delete curr;
         // Go to next node in list
@@ -46,7 +43,7 @@ void SparseVector::copyList(const SparseVector &sv)
         node *curr = new node(otherCurr->index, otherCurr->value);
         if (prev == 0)
             firstnon0 = curr;
-        // curr is the first node in our copy!
+        // curr is checkthe first node in our copy!
         else
             prev->next = curr; // Make previous node point to current
         prev = curr;
@@ -56,7 +53,6 @@ void SparseVector::copyList(const SparseVector &sv)
     {
         firstnon0 = 0;
     }
-    //checkListOrder();
 }
 
 // helper method to set a nonzero value for a node with specified index
@@ -65,8 +61,6 @@ void SparseVector::setNonzeroElem(int idx, int val)
     assert(val != 0);
     node *curr = firstnon0;
     node *prev = 0;
-
-    //checkListOrder();
 
     if (firstnon0 != 0)
     {
@@ -77,7 +71,6 @@ void SparseVector::setNonzeroElem(int idx, int val)
             curr = curr->next;
         }
 
-        //checkListOrder();
         // if we find the index
         if (curr->index == idx)
         {
@@ -90,7 +83,7 @@ void SparseVector::setNonzeroElem(int idx, int val)
             firstnon0 = newnode;
         }
         // if we can't find the index and are at the end of the list
-        else if (curr->next == 0)
+        else if (curr->index < idx && curr->next == 0)
         {
             node *newnode = new node(idx, val);
             curr->next = newnode;
@@ -98,47 +91,54 @@ void SparseVector::setNonzeroElem(int idx, int val)
         // if we can't find the index and are in the middle of the list
         else if (curr->index > idx)
         {
-            node *newnode = new node(idx, val);
+            node *newnode = new node(idx, val, curr);
             prev->next = newnode;
-            newnode->next = curr;
         }
     }
     else
     {
         firstnon0 = new node(idx, val);
     }
-    //checkListOrder();
 }
 
 // helper method to delete a node from the list
 void SparseVector::removeElem(int idx)
 {
     node *curr = firstnon0;
-    node *prev;
+    node *prev = 0;
 
     // go through the sparse vector
-    while (curr != 0 && curr->index < idx)
+    while (curr->next != 0 && curr->index < idx)
     {
         prev = curr;
         curr = curr->next;
     }
+    // if we find the index are at the beginning of the list
+    if (curr->index == idx && prev == 0)
+    {
+        firstnon0 = curr->next;
+        delete curr;
+    }
 
+    // if we find the index at the end of the list
+    else if (curr->index == idx && curr->next == 0)
+    {
+        prev->next = 0;
+        delete curr;
+    }
     // if we find the index and are at the middle of the list
-    if (curr != 0 && curr->index == idx)
+    else if (curr != 0 && curr->index == idx)
     {
         prev->next = curr->next;
         delete curr;
     }
     // if we don't find the index, nothing needs to be done!
-
-    //checkListOrder();
 }
 
 // Copy-constructor
 SparseVector::SparseVector(const SparseVector &sv)
 {
     this->copyList(sv);
-    //checkListOrder();
 }
 
 // Destructor
@@ -158,7 +158,6 @@ int SparseVector::getSize() const
 int SparseVector::getElem(int idx) const
 {
     node *curr = firstnon0;
-    //checkListOrder();
     if (curr != 0)
     {
         while(curr->index < idx && curr->next != 0)
@@ -169,11 +168,9 @@ int SparseVector::getElem(int idx) const
         // if we find the desired index, return the value
         if (curr->index == idx)
         {
-            //checkListOrder();
             return curr->value;
         }
     }
-    //checkListOrder();
     return 0;
 }
 
@@ -209,8 +206,6 @@ void SparseVector::checkListOrder() const
     int idx = -1;
     while (test != 0)
     {
-        //printf("apparently so \n");
-
         if (idx < test->index)
         {
             idx = test->index;
