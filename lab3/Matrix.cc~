@@ -153,7 +153,7 @@ Matrix& Matrix::operator*= (const Matrix &mat)
         {
             for (int k = 0; k < mat.col; k++)
             {
-                result.arr[i*this->col + k] += this->arr[i*this->col + j] * mat.arr[j*mat.col + k];
+                result.arr[i*mat.col + k] += this->arr[i*this->col + j] * mat.arr[j*mat.col + k];
             }
         }
     }
