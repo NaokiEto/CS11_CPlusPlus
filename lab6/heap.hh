@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 #include <stdexcept>      // std::overflow, underflow
 #include <stdio.h>

@@ -6,6 +6,10 @@
 #include <string>
 using namespace std;
 
+/* 
+ * Heap Class Template, can declare what type to input in array
+ * and the size of the array
+ */
 template <typename T, int size> class Heap
 {
     private:
