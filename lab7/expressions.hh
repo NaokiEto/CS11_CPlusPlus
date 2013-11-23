@@ -4,6 +4,7 @@
 #include <string>
 #include "environment.hh"
 #include <cassert>
+#include <cmath>
 
 // A base class which declares what every single expression will provide
 class Expression
@@ -184,6 +185,23 @@ class DivOper: public BinaryOperator
         {
             return left->evaluate(env) / right->evaluate(env);
         }
+    }
+};
+
+// Class for the binary exponential operation
+class ExpOper: public BinaryOperator
+{
+    public:
+    ExpOper(Expression *pLHS, Expression *pRHS): BinaryOperator(pLHS, pRHS)
+    {
+        // Intentionally empty, since the construction is taken care of
+        // in BinaryOperator 
+    }
+
+    // Evaluate the division operation
+    double evaluate(const Environment &env) const
+    {
+        return pow(left->evaluate(env), right->evaluate(env));
     }
 };
 

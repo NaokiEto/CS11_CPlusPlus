@@ -187,6 +187,23 @@ class DivOper: public BinaryOperator
     }
 };
 
+// Class for the binary exponential operation
+class ExpOper: public BinaryOperator
+{
+    public:
+    ExpOper(Expression *pLHS, Expression *pRHS): BinaryOperator(pLHS, pRHS)
+    {
+        // Intentionally empty, since the construction is taken care of
+        // in BinaryOperator 
+    }
+
+    // Evaluate the division operation
+    double evaluate(const Environment &env) const
+    {
+        return pow(left->evaluate(env), right->evaluate(env));
+    }
+};
+
 // Class that provides the common features of all binary operators
 class UnaryOperator: public Expression
 {
@@ -212,7 +229,7 @@ class UnaryOperator: public Expression
         return exp;
     }
     
-    // Destructor (delete the two pointers)
+    // Destructor (delete the one pointer)
     ~UnaryOperator()
     {
         delete exp;
