@@ -30,7 +30,7 @@ ws	[ \t]
 {ws}+		/* yylloc->step(); */
 [\n]+		/* yylloc->lines(yyleng); yylloc->step(); */
 
-[=\-+*^/()]	return yytext[0];
+[=\-+*^!/()]	return yytext[0];
 
 {id}	yylval.sval = new std::string(yytext); return TOKEN_IDENTIFIER;
 

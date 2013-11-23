@@ -198,7 +198,7 @@ class ExpOper: public BinaryOperator
         // in BinaryOperator 
     }
 
-    // Evaluate the division operation
+    // Evaluate the exponential operation
     double evaluate(const Environment &env) const
     {
         return pow(left->evaluate(env), right->evaluate(env));
@@ -237,10 +237,11 @@ class UnaryOperator: public Expression
     }
 };
 
+// Class for the negation of a value
 class NegOper: public UnaryOperator
 {
     public:
-    // A single constructor that takes the pointers to a expression
+    // A single constructor that takes the pointers to an expression
     NegOper(Expression *express): UnaryOperator(express)
     {
         // Intentionally empty, since the construction is taken care of
@@ -251,6 +252,42 @@ class NegOper: public UnaryOperator
     double evaluate(const Environment &env) const
     {
         return exp->evaluate(env) * -1;
+    }
+};
+
+// Class which calculates the factorial of an integer number
+class FacOper: public UnaryOperator
+{
+    public:
+    // A single constructor that takes the pointers to an expression
+    FacOper(Expression *express): UnaryOperator(express)
+    {
+        // Intentionally empty, since the construction is taken care of
+        // in UnaryOperator
+    }
+
+    // Evaluate the factorial operation
+    double evaluate(const Environment &env) const
+    {
+        double num = exp->evaluate(env);
+        int intnum = (int) num;
+
+        // If the number is not an integer, throw an error
+        if (num - intnum > 0)
+        {
+            throw runtime_error("To do factorial, the number must be an integer!");
+        }
+        else
+        {
+            // Start the factorial at 1
+            int factorial = 1;
+            // Do recursion
+            for (int i = 1; i < intnum + 1; i++)
+            {
+                factorial *= i;
+            }
+            return (double) factorial;
+        }
     }
 };
 

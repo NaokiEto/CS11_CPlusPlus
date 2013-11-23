@@ -43,6 +43,7 @@ assign:	  TOKEN_IDENTIFIER '=' expr { $$ = new AssignCommand( new Symbol( *$1 ),
 %left '+' '-';		/* Addition and subtraction */
 %left '*' '/';		/* Multiplication and division */
 %left '^';      /* Exponential */
+%left '!';      /* Factorial */
 %left NEG;		/* Negation - unary minus */
 
 expr:	  '(' expr ')'		{ $$ = $2; }
@@ -52,6 +53,7 @@ expr:	  '(' expr ')'		{ $$ = $2; }
 	| expr '/' expr		{ $$ = new DivOper( $1 , $3 ); }
 	| expr '^' expr		{ $$ = new ExpOper( $1 , $3 ); }
 	| '-' expr %prec NEG	{ $$ = new NegOper( $2 ); }
+    | expr '!'          { $$ = new FacOper( $1 ); }
 	| TOKEN_IDENTIFIER	{ $$ = new Symbol( *$1 ); }
 	| TOKEN_NUMBER		{ $$ = new Value( $1 ); }
 	;
